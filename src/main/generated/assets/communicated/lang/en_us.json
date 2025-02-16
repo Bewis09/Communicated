@@ -1,0 +1,14 @@
+{
+  "communicated.designated_to_field": "Designated to: ",
+  "communicated.gui.close_envelope": "Close Envelope",
+  "communicated.gui.envelope_screen": "Envelope",
+  "communicated.letter_for": "for %s",
+  "communicated.letter_paper_count": "%s papers",
+  "communicated.letter_paper_one_page_tooltip": "1 Page",
+  "communicated.letter_paper_pages_tooltip": "%s Pages",
+  "communicated.single_paper_count": "1 paper",
+  "communicated.unsigned_paper": "(unsigned)",
+  "item.communicated.envelope": "Envelope",
+  "item.communicated.letter": "Letter",
+  "item.communicated.letter_paper": "Letter Paper"
+}

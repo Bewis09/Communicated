@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "minecraft:paper",
+    "minecraft:paper"
+  ],
+  "result": {
+    "count": 1,
+    "id": "communicated:envelope"
+  }
+}

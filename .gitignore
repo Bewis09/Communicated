@@ -1,9 +1,11 @@
 # gradle
 
 .gradle/
+.kotlin/
 build/
 out/
 classes/
+src/main/generated/.cache
 
 # eclipse
 
