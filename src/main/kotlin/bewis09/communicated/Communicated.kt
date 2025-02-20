@@ -3,7 +3,7 @@ package bewis09.communicated
 import bewis09.communicated.item.CommunicatedItems
 import bewis09.communicated.item.components.CommunicatedComponents
 import bewis09.communicated.screen.EnvelopeScreenHandler
-import bewis09.communicated.server.CommunicatedC2SPackets
+import bewis09.communicated.server.CommunicatedServersidePackets
 import net.fabricmc.api.ModInitializer
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
@@ -26,14 +26,14 @@ object Communicated : ModInitializer {
 	override fun onInitialize() {
 		LOGGER.info("Loading Communicated!")
 
-		CommunicatedC2SPackets.register()
+		CommunicatedServersidePackets.register()
 
 		CommunicatedItems
 		CommunicatedComponents
 	}
 
 	private fun <K: ScreenHandler> register(path: String, factory: ScreenHandlerType.Factory<K>): ScreenHandlerType<K> {
-		return Registry.register(Registries.SCREEN_HANDLER, Identifier.of("communicated", path), ScreenHandlerType(factory, FeatureFlags.VANILLA_FEATURES));
+		return Registry.register(Registries.SCREEN_HANDLER, Identifier.of("communicated", path), ScreenHandlerType(factory, FeatureFlags.VANILLA_FEATURES))
 	}
 
 	fun translatedText(path: String, en_us: String): MutableText {

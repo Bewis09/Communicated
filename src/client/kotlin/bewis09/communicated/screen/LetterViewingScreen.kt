@@ -4,6 +4,7 @@ import bewis09.communicated.Communicated
 import bewis09.communicated.item.LetterPaperItem.Companion.ONE_PAGE_TEXT
 import bewis09.communicated.item.LetterPaperItem.Companion.PAGES_TEXT
 import bewis09.communicated.item.components.LetterComponent
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.render.RenderLayer
@@ -11,6 +12,8 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
 class LetterViewingScreen(private val component: LetterComponent, title: Text): Screen(title) {
+    val element_height = 30
+
     companion object {
         val NO_PAPER = Communicated.translatedText("letter.no_paper", "This letter contains no papers")
     }
@@ -18,10 +21,9 @@ class LetterViewingScreen(private val component: LetterComponent, title: Text): 
     override fun render(context: DrawContext?, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(context, mouseX, mouseY, delta)
 
-        val element_height = 30
         val total_height = (if (component.author == null) 20 else 29) + if(component.papers.isEmpty()) 9 else component.papers.size * element_height
 
-        val total_width = component.papers.map { it.title }.maxOfOrNull { textRenderer.getWidth(it) }?.plus(30) ?: 30
+        val total_width = component.papers.map { it.title }.also { mutableListOf(*it.toTypedArray()).add(PAGES_TEXT(arrayOf(10))) }.maxOfOrNull { textRenderer.getWidth(it) }?.plus(30) ?: 0
         val top = (height / 2.5).toInt() - total_height / 2
 
         val x = width / 2 - total_width / 2
@@ -33,6 +35,11 @@ class LetterViewingScreen(private val component: LetterComponent, title: Text): 
 
         for ((index, c) in component.papers.withIndex()) {
             y = top + (if (component.author == null) 20 else 29) + index * element_height
+
+            if (mouseX in x - 5..<x+total_width+5 && mouseY in y+3..<y+element_height+3) {
+                context?.fill(x - 5,y+3,x + total_width + 5,y + 3 + element_height,0xFF000000.toInt())
+                context?.drawBorder(x - 5,y+3,total_width + 10,element_height+1,-1)
+            }
 
             context?.drawTexture({ texture: Identifier? -> RenderLayer.getGuiTextured(texture) }, Identifier.of("communicated","textures/item/letter_paper.png"), x, y + 8, 0f, 0f, 20, 20, 20, 20)
 
@@ -46,5 +53,24 @@ class LetterViewingScreen(private val component: LetterComponent, title: Text): 
 
     override fun renderBackground(context: DrawContext?, mouseX: Int, mouseY: Int, delta: Float) {
         renderInGameBackground(context)
+    }
+
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        val total_height = (if (component.author == null) 20 else 29) + if(component.papers.isEmpty()) 9 else component.papers.size * element_height
+
+        val total_width = component.papers.map { it.title }.also { mutableListOf(*it.toTypedArray()).add(PAGES_TEXT(arrayOf(10))) }.maxOfOrNull { textRenderer.getWidth(it) }?.plus(30) ?: 0
+        val top = (height / 2.5).toInt() - total_height / 2
+
+        val x = width / 2 - total_width / 2
+
+        for ((index, c) in component.papers.withIndex()) {
+            val y = top + (if (component.author == null) 20 else 29) + index * element_height
+
+            if (mouseX.toInt() in x - 5..<x+total_width+5 && mouseY.toInt() in y+3..<y+element_height+3) {
+                MinecraftClient.getInstance().setScreen(LetterPaperViewingScreen(c, this))
+            }
+        }
+
+        return false
     }
 }
