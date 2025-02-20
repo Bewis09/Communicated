@@ -17,8 +17,8 @@ import net.minecraft.world.World
 
 class LetterPaperItem(settings: Settings): Item(settings), GeneratedTranslationItem, FlatModelItem {
     companion object {
-        private val PAGES_TEXT = Communicated.translatedTextWithParams("letter_paper_pages_tooltip","%s Pages")
-        private val ONE_PAGE_TEXT = Communicated.translatedText("letter_paper_one_page_tooltip","1 Page")
+        val PAGES_TEXT = Communicated.translatedTextWithParams("letter_paper_pages_tooltip","%s Pages")
+        val ONE_PAGE_TEXT = Communicated.translatedText("letter_paper_one_page_tooltip","1 Page")
     }
 
     override fun use(world: World?, user: PlayerEntity?, hand: Hand?): ActionResult {

@@ -94,7 +94,7 @@ class EnvelopeClosingScreen(private val player_name: String, private val slot: I
         val x = width / 2 - background_width / 2
         val y = height / 2 - background_height / 2
 
-        context?.drawTexture({ texture: Identifier? -> RenderLayer.getGuiTextured(texture) }, Identifier.of("communicated","textures/screen/envelope_closing.png"), x, y, 0f, 0f, 256, 256, 256, 256)
+        context?.drawTexture({ texture: Identifier? -> RenderLayer.getGuiTextured(texture) } , Identifier.of("communicated","textures/screen/envelope_closing.png"), x, y, 0f, 0f, 256, 256, 256, 256)
 
         context?.drawText(textRenderer, proposed_title, this.width / 2 - ceil(textRenderer.getWidth(proposed_title) / 2.0).toInt(), y + 7, 0xFF444444.toInt(), false)
         if(!designated_text_field.isFocused)

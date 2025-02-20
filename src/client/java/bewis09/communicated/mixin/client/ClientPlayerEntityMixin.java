@@ -1,14 +1,14 @@
 package bewis09.communicated.mixin.client;
 
 import bewis09.communicated.Communicated;
+import bewis09.communicated.item.components.LetterComponent;
 import bewis09.communicated.screen.LetterPaperScreen;
+import bewis09.communicated.screen.LetterViewingScreen;
 import bewis09.communicated.util.PlayerEntityInvoker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
-import net.minecraft.util.Hand;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -20,7 +20,13 @@ public class ClientPlayerEntityMixin implements PlayerEntityInvoker {
 
     @Unique
     @Override
-    public void communicated$openPaper(@NotNull ItemStack book, @NotNull int slot) {
+    public void communicated$openPaper(@NotNull ItemStack book, int slot) {
         MinecraftClient.getInstance().setScreen(new LetterPaperScreen(TITLE, book, slot));
+    }
+
+    @Unique
+    @Override
+    public void communicated$openLetter(LetterComponent component, Text text) {
+        MinecraftClient.getInstance().setScreen(new LetterViewingScreen(component, text));
     }
 }

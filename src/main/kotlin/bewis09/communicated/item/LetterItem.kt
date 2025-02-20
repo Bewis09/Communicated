@@ -2,8 +2,10 @@ package bewis09.communicated.item
 
 import bewis09.communicated.Communicated
 import bewis09.communicated.item.components.CommunicatedComponents
+import bewis09.communicated.item.components.LetterComponent
 import bewis09.communicated.item.interfaces.FlatModelItem
 import bewis09.communicated.item.interfaces.GeneratedTranslationItem
+import bewis09.communicated.util.PlayerEntityInvoker
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -22,9 +24,14 @@ class LetterItem(settings: Settings): Item(settings), GeneratedTranslationItem, 
     }
 
     override fun use(world: World?, user: PlayerEntity?, hand: Hand?): ActionResult {
-        user?.swingHand(hand)
+        if(user == null) return super.use(world, null, hand)
 
-        return super.use(world, user, hand)
+        val stack = if(hand==Hand.MAIN_HAND) user.inventory.mainHandStack else user.inventory.getStack(40)
+        val content = stack.get(CommunicatedComponents.LETTER_CONTENT) ?: LetterComponent(stack.name.string, null, listOf(), null)
+
+        (user as PlayerEntityInvoker).`communicated$openLetter`(content, stack.name)
+
+        return ActionResult.SUCCESS
     }
 
     override fun getName(stack: ItemStack?): Text {

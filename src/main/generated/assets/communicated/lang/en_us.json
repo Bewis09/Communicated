@@ -2,6 +2,7 @@
   "communicated.designated_to_field": "Designated to: ",
   "communicated.gui.close_envelope": "Close Envelope",
   "communicated.gui.envelope_screen": "Envelope",
+  "communicated.letter.no_paper": "This letter contains no papers",
   "communicated.letter_for": "for %s",
   "communicated.letter_paper_count": "%s papers",
   "communicated.letter_paper_one_page_tooltip": "1 Page",

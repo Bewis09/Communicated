@@ -36,6 +36,16 @@ object CommunicatedDataGenerator : DataGeneratorEntrypoint {
 			Ingredient.ofItem(Items.PAPER),
 			Ingredient.ofItem(Items.PAPER)
 		))
+
+		addRecipe(ShapelessGeneratedCraftingRecipe(
+			RecipeCategory.TOOLS,
+			CommunicatedItems.LETTER_PAPER,
+			1,
+			"letter_paper",
+			Ingredient.ofItem(Items.PAPER),
+			Ingredient.ofItem(Items.INK_SAC),
+			Ingredient.ofItem(Items.FEATHER)
+		))
 	}
 
 	override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
