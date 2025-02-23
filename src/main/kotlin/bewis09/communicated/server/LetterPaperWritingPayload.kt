@@ -12,23 +12,23 @@ import net.minecraft.network.packet.CustomPayload
 import net.minecraft.network.packet.CustomPayload.Id
 import net.minecraft.util.Identifier
 
-class FinishLetterWritingPayload(val pages: List<String>, val slot: Int): CommunicatedC2SPayload<FinishLetterWritingPayload> {
+class LetterPaperWritingPayload(val pages: List<String>, val slot: Int): CommunicatedC2SPayload<LetterPaperWritingPayload> {
     companion object {
-        val ID = Id<FinishLetterWritingPayload>(Identifier.of("communicated","finish_letter_writing"))
-        val CODEC: PacketCodec<PacketByteBuf, FinishLetterWritingPayload> = PacketCodec.tuple(
+        val ID = Id<LetterPaperWritingPayload>(Identifier.of("communicated","finish_letter_writing"))
+        val CODEC: PacketCodec<PacketByteBuf, LetterPaperWritingPayload> = PacketCodec.tuple(
             PacketCodecs.string(1024).collect(PacketCodecs.toList(10)),
-            { a: FinishLetterWritingPayload -> a.pages},
+            { a: LetterPaperWritingPayload -> a.pages},
             PacketCodecs.INTEGER,
-            { a: FinishLetterWritingPayload -> a.slot})
-            { str: List<String>, slot: Int -> FinishLetterWritingPayload(str,slot) }
+            { a: LetterPaperWritingPayload -> a.slot})
+            { str: List<String>, slot: Int -> LetterPaperWritingPayload(str,slot) }
     }
 
     override fun getId(): Id<out CustomPayload> {
         return ID
     }
 
-    override fun receive(context: ServerPlayNetworking.Context?) {
-        context?.server()?.execute {
+    override fun receive(context: ServerPlayNetworking.Context) {
+        context.server()?.execute {
             if (PlayerInventory.isValidHotbarIndex(slot) || slot == 40 && context.player().inventory.getStack(slot).item == CommunicatedItems.LETTER_PAPER) {
                 context.player().inventory.getStack(slot).set(CommunicatedComponents.LETTER_PAPER_CONTENT, LetterPaperComponent(pages.map { it }))
             }

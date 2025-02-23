@@ -5,11 +5,15 @@ import bewis09.communicated.item.components.CommunicatedComponents
 import bewis09.communicated.item.components.LetterComponent
 import bewis09.communicated.item.interfaces.FlatModelItem
 import bewis09.communicated.item.interfaces.GeneratedTranslationItem
-import bewis09.communicated.util.PlayerEntityInvoker
+import bewis09.communicated.server.LetterOpeningPayload
+import bewis09.communicated.util.EncryptionUtil
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.tooltip.TooltipType
+import net.minecraft.network.packet.s2c.play.OverlayMessageS2CPacket
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Formatting
@@ -18,6 +22,7 @@ import net.minecraft.world.World
 
 class LetterItem(settings: Settings): Item(settings), GeneratedTranslationItem, FlatModelItem {
     companion object {
+        val NOT_FOR_YOU = Communicated.translatedText("letter.not_for_you", "You are not allowed to open this letter")
         val LETTER_FOR = Communicated.translatedTextWithParams("letter_for", "for %s")
         val PAPER_COUNT = Communicated.translatedTextWithParams("letter_paper_count", "%s papers")
         val SINGLE_PAPER_COUNT = Communicated.translatedText("single_paper_count", "1 paper")
@@ -26,10 +31,20 @@ class LetterItem(settings: Settings): Item(settings), GeneratedTranslationItem, 
     override fun use(world: World?, user: PlayerEntity?, hand: Hand?): ActionResult {
         if(user == null) return super.use(world, null, hand)
 
-        val stack = if(hand==Hand.MAIN_HAND) user.inventory.mainHandStack else user.inventory.getStack(40)
-        val content = stack.get(CommunicatedComponents.LETTER_CONTENT) ?: LetterComponent(stack.name.string, null, listOf(), null)
+        if(world == null || world.isClient() && user !is ServerPlayerEntity) return ActionResult.SUCCESS
 
-        (user as PlayerEntityInvoker).`communicated$openLetter`(content, stack.name)
+        val stack = if(hand==Hand.MAIN_HAND) user.mainHandStack else user.offHandStack
+        val data = stack.get(CommunicatedComponents.LETTER_CONTENT) ?: LetterComponent(stack.name.string, null, listOf(), null)
+
+        if(data.designated_to == null || user.gameProfile?.name == data.designated_to) {
+            ServerPlayNetworking.send(user as ServerPlayerEntity, LetterOpeningPayload(LetterComponent(data.title,data.author,data.papers.map {
+                return@map LetterComponent.PaperComponentPart(it.pages.map { a ->
+                    EncryptionUtil.decrypt(a, Communicated.getEncryptionKey(world.server!!))
+                },it.title)
+            },null)))
+        } else {
+            (user as ServerPlayerEntity).networkHandler.sendPacket(OverlayMessageS2CPacket(NOT_FOR_YOU))
+        }
 
         return ActionResult.SUCCESS
     }

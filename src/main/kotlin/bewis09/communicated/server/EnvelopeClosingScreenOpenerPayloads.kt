@@ -10,17 +10,20 @@ import net.minecraft.network.packet.CustomPayload.Id
 import net.minecraft.util.Identifier
 
 class EnvelopeClosingScreenOpenerPayloads {
-    class C2S: CommunicatedC2SPayload<C2S> {
+    class C2S(val slot: Int): CommunicatedC2SPayload<C2S> {
         companion object {
             val ID = Id<C2S>(Identifier.of("communicated","close_envelope_screen_c2s"))
-            val CODEC: PacketCodec<PacketByteBuf, C2S> = PacketCodec.of({ _, _ ->  },{ _ -> C2S() })
+            val CODEC: PacketCodec<PacketByteBuf, C2S> = PacketCodec.tuple(
+                PacketCodecs.INTEGER,
+                { a -> a.slot }
+            ) { a -> C2S(a) }
         }
 
-        override fun receive(context: ServerPlayNetworking.Context?) {
-            val i = context?.player()?.currentScreenHandler
+        override fun receive(context: ServerPlayNetworking.Context) {
+            val i = context.player()?.currentScreenHandler
 
             if(i is EnvelopeScreenHandler) {
-                ServerPlayNetworking.send(context.player(), S2C(i.playerInventory.getSlotWithStack(i.itemStack)))
+                ServerPlayNetworking.send(context.player(), S2C(slot))
             }
         }
 

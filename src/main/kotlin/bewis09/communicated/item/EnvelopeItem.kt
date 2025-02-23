@@ -25,8 +25,8 @@ class EnvelopeItem(settings: Settings): Item(settings), GeneratedTranslationItem
                 return TITLE
             }
 
-            override fun createMenu(syncId: Int, playerInventory: PlayerInventory?, player: PlayerEntity?): ScreenHandler? {
-                return EnvelopeScreenHandler(syncId, playerInventory!!, if(hand == Hand.MAIN_HAND) playerInventory.mainHandStack else playerInventory.getStack(40))
+            override fun createMenu(syncId: Int, playerInventory: PlayerInventory?, player: PlayerEntity?): ScreenHandler {
+                return EnvelopeScreenHandler(syncId, playerInventory!!)
             }
         })
 

@@ -8,12 +8,13 @@ import net.minecraft.network.packet.CustomPayload
 
 object CommunicatedServersidePackets {
     fun register() {
-        registerC2S(CloseEnvelopePayload.ID, CloseEnvelopePayload.CODEC)
-        registerC2S(FinishLetterWritingPayload.ID, FinishLetterWritingPayload.CODEC)
+        registerC2S(EnvelopeClosingPayload.ID, EnvelopeClosingPayload.CODEC)
+        registerC2S(LetterPaperWritingPayload.ID, LetterPaperWritingPayload.CODEC)
 
         registerC2S(EnvelopeClosingScreenOpenerPayloads.C2S.ID, EnvelopeClosingScreenOpenerPayloads.C2S.CODEC)
-
         registerS2C(EnvelopeClosingScreenOpenerPayloads.S2C.ID, EnvelopeClosingScreenOpenerPayloads.S2C.CODEC)
+
+        registerS2C(LetterOpeningPayload.ID, LetterOpeningPayload.CODEC)
     }
 
     private fun <T: CustomPayload> registerS2C(id: CustomPayload.Id<T>, codec: PacketCodec<PacketByteBuf, T>) {
@@ -24,7 +25,9 @@ object CommunicatedServersidePackets {
         PayloadTypeRegistry.playC2S().register(id, codec)
 
         ServerPlayNetworking.registerGlobalReceiver(id) {payload, context ->
-            payload.receive(context)
+            context.server().execute {
+                payload.receive(context)
+            }
         }
     }
 }

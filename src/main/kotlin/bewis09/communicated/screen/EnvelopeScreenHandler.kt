@@ -2,7 +2,6 @@ package bewis09.communicated.screen
 
 import bewis09.communicated.Communicated
 import bewis09.communicated.item.CommunicatedItems
-import com.google.common.collect.ImmutableList
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.ContainerComponent
 import net.minecraft.entity.player.PlayerEntity
@@ -15,11 +14,12 @@ import net.minecraft.screen.slot.Slot
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.collection.DefaultedList
 
-class EnvelopeScreenHandler(syncId: Int, val playerInventory: PlayerInventory, val itemStack: ItemStack): ScreenHandler(Communicated.ENVELOPE_SCREEN_HANDLER, syncId) {
+class EnvelopeScreenHandler(syncId: Int, val playerInventory: PlayerInventory, val slot: Int): ScreenHandler(Communicated.ENVELOPE_SCREEN_HANDLER, syncId) {
     private val defaultedList = DefaultedList.ofSize(3, ItemStack.EMPTY)
     private val inventory: SimpleInventory
+    val itemStack: ItemStack = playerInventory.getStack(slot)
 
-    constructor(syncId: Int, playerInventory: PlayerInventory): this(syncId, playerInventory, if(playerInventory.mainHandStack.item == CommunicatedItems.ENVELOPE) playerInventory.mainHandStack else playerInventory.getStack(40))
+    constructor(syncId: Int, playerInventory: PlayerInventory): this(syncId, playerInventory, if(playerInventory.mainHandStack.item == CommunicatedItems.ENVELOPE) playerInventory.selectedSlot else 40)
 
     init {
         itemStack.get(DataComponentTypes.CONTAINER)?.copyTo(defaultedList)
@@ -32,12 +32,12 @@ class EnvelopeScreenHandler(syncId: Int, val playerInventory: PlayerInventory, v
         addListener(object: ScreenHandlerListener {
             override fun onSlotUpdate(handler: ScreenHandler?, slotId: Int, stack: ItemStack?) {
                 val player = playerInventory.player
-                if(!playerInventory.contains(itemStack) && player is ServerPlayerEntity) (player).closeHandledScreen()
+                if(player is ServerPlayerEntity && playerInventory.getStack(slot) != itemStack) (player).closeHandledScreen()
             }
 
             override fun onPropertyUpdate(handler: ScreenHandler?, property: Int, value: Int) {
                 val player = playerInventory.player
-                if(!playerInventory.contains(itemStack) && player is ServerPlayerEntity) (player).closeHandledScreen()
+                if(player is ServerPlayerEntity && playerInventory.getStack(slot) != itemStack) (player).closeHandledScreen()
             }
         })
 

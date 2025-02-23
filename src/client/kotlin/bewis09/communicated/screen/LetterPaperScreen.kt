@@ -2,7 +2,7 @@ package bewis09.communicated.screen
 
 import bewis09.communicated.drawable.LetterPaperEditBox
 import bewis09.communicated.item.components.CommunicatedComponents
-import bewis09.communicated.server.FinishLetterWritingPayload
+import bewis09.communicated.server.LetterPaperWritingPayload
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
@@ -62,7 +62,7 @@ class LetterPaperScreen(title: Text, itemStack: ItemStack, private val slot: Int
     }
 
     override fun close() {
-        ClientPlayNetworking.send(FinishLetterWritingPayload(text.filterIndexed { i, v -> i == 0 || v != "" || text.subList(i, text.size).any { it != "" } },slot))
+        ClientPlayNetworking.send(LetterPaperWritingPayload(text.filterIndexed { i, v -> i == 0 || v != "" || text.subList(i, text.size).any { it != "" } },slot))
 
         super.close()
     }

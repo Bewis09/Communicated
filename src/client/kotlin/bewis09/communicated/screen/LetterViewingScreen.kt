@@ -11,8 +11,8 @@ import net.minecraft.client.render.RenderLayer
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
-class LetterViewingScreen(private val component: LetterComponent, title: Text): Screen(title) {
-    val element_height = 30
+class LetterViewingScreen(private val component: LetterComponent): Screen(Text.of(component.title)) {
+    private val element_height = 30
 
     companion object {
         val NO_PAPER = Communicated.translatedText("letter.no_paper", "This letter contains no papers")
@@ -23,7 +23,7 @@ class LetterViewingScreen(private val component: LetterComponent, title: Text): 
 
         val total_height = (if (component.author == null) 20 else 29) + if(component.papers.isEmpty()) 9 else component.papers.size * element_height
 
-        val total_width = component.papers.map { it.title }.also { mutableListOf(*it.toTypedArray()).add(PAGES_TEXT(arrayOf(10))) }.maxOfOrNull { textRenderer.getWidth(it) }?.plus(30) ?: 0
+        val total_width = textRenderer.getWidth(PAGES_TEXT(arrayOf(10))).coerceAtLeast(component.papers.map { Text.of(it.title) }.maxOfOrNull { textRenderer.getWidth(it) } ?: 0).plus(30)
         val top = (height / 2.5).toInt() - total_height / 2
 
         val x = width / 2 - total_width / 2
@@ -58,7 +58,7 @@ class LetterViewingScreen(private val component: LetterComponent, title: Text): 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         val total_height = (if (component.author == null) 20 else 29) + if(component.papers.isEmpty()) 9 else component.papers.size * element_height
 
-        val total_width = component.papers.map { it.title }.also { mutableListOf(*it.toTypedArray()).add(PAGES_TEXT(arrayOf(10))) }.maxOfOrNull { textRenderer.getWidth(it) }?.plus(30) ?: 0
+        val total_width = component.papers.map { Text.of(it.title) }.also { mutableListOf(*it.toTypedArray()).add(PAGES_TEXT(arrayOf(10))) }.maxOfOrNull { textRenderer.getWidth(it) }?.plus(30) ?: 0
         val top = (height / 2.5).toInt() - total_height / 2
 
         val x = width / 2 - total_width / 2

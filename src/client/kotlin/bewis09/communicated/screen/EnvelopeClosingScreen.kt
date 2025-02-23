@@ -1,7 +1,7 @@
 package bewis09.communicated.screen
 
 import bewis09.communicated.Communicated
-import bewis09.communicated.server.CloseEnvelopePayload
+import bewis09.communicated.server.EnvelopeClosingPayload
 import bewis09.communicated.util.MixinChildClassIdentifier
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.minecraft.client.gui.DrawContext
@@ -59,7 +59,7 @@ class EnvelopeClosingScreen(private val player_name: String, private val slot: I
         addDrawableChild(ButtonWidget.builder(title) {
             if(proposed_title.isEmpty()) return@builder
 
-            ClientPlayNetworking.send(CloseEnvelopePayload(
+            ClientPlayNetworking.send(EnvelopeClosingPayload(
                 proposed_title,
                 designated_text_field.text,
                 author_shown,

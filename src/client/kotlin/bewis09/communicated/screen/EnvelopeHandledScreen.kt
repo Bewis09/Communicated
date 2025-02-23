@@ -25,7 +25,7 @@ class EnvelopeHandledScreen(handler: EnvelopeScreenHandler, playerInventory: Pla
         super.init()
 
         addDrawableChild(ButtonWidget.builder(CLOSE){
-            ClientPlayNetworking.send(EnvelopeClosingScreenOpenerPayloads.C2S())
+            ClientPlayNetworking.send(EnvelopeClosingScreenOpenerPayloads.C2S(screenHandler.slot))
         }.dimensions(x+75,y+16,94,20).build())
     }
 

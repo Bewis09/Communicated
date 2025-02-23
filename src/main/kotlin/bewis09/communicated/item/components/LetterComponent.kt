@@ -1,23 +1,19 @@
 package bewis09.communicated.item.components
 
-import bewis09.communicated.item.CommunicatedItems
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.component.ComponentType
-import net.minecraft.text.Text
-import net.minecraft.text.TextCodecs
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 class LetterComponent(val title: String, val author: String?, val papers: List<PaperComponentPart>, val designated_to: String?) {
-    class PaperComponentPart(val pages: List<String>, val title: Text)
+    class PaperComponentPart(val pages: List<String>, val title: String)
 
     companion object {
         private val PAPER_CODEC: Codec<PaperComponentPart> = RecordCodecBuilder.create {
             it.group(
                 Codec.string(0, 2048).sizeLimitedListOf(10).fieldOf("pages").forGetter { a -> a.pages },
-                TextCodecs.STRINGIFIED_CODEC.fieldOf("title").forGetter { a -> a.title }
-            ).apply(it) { pages: List<String>, title: Text -> PaperComponentPart(pages, title) }
+                Codec.STRING.fieldOf("title").forGetter { a -> a.title }
+            ).apply(it) { pages: List<String>, title: String -> PaperComponentPart(pages, title) }
         }
 
         val CODEC: Codec<LetterComponent?> = RecordCodecBuilder.create {
