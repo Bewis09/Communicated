@@ -13,6 +13,7 @@ import net.minecraft.state.property.EnumProperty
 import net.minecraft.util.ActionResult
 import net.minecraft.util.BlockMirror
 import net.minecraft.util.BlockRotation
+import net.minecraft.util.ItemScatterer
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
@@ -109,5 +110,10 @@ class MailboxBlock(settings: Settings, private val en_us: String): BlockWithEnti
 
     override fun getPlacementState(ctx: ItemPlacementContext): BlockState {
         return defaultState.with(FACING, if(ctx.side == Direction.UP || ctx.side == Direction.DOWN) ctx.horizontalPlayerFacing.opposite else ctx.side)
+    }
+
+    override fun onStateReplaced(state: BlockState, world: World?, pos: BlockPos?, newState: BlockState, moved: Boolean) {
+        ItemScatterer.onStateReplaced(state, newState, world, pos)
+        super.onStateReplaced(state, world, pos, newState, moved)
     }
 }
