@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "minecraft:spruce_log",
+    "B": "minecraft:spruce_planks"
+  },
+  "pattern": [
+    "AA",
+    "BB",
+    "BB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "communicated:spruce_mailbox"
+  }
+}

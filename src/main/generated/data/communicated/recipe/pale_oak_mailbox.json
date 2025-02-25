@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "minecraft:pale_oak_log",
+    "B": "minecraft:pale_oak_planks"
+  },
+  "pattern": [
+    "AA",
+    "BB",
+    "BB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "communicated:pale_oak_mailbox"
+  }
+}

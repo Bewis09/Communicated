@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "communicated:block/birch_mailbox",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "communicated:block/birch_mailbox"
+    },
+    "facing=south": {
+      "model": "communicated:block/birch_mailbox",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "communicated:block/birch_mailbox",
+      "y": 270
+    }
+  }
+}

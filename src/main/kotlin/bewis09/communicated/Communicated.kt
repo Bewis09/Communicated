@@ -1,19 +1,15 @@
 package bewis09.communicated
 
+import bewis09.communicated.block.CommunicatedBlocks
+import bewis09.communicated.block.entity.CommunicatedBlockEntities
 import bewis09.communicated.item.CommunicatedItems
 import bewis09.communicated.item.components.CommunicatedComponents
-import bewis09.communicated.screen.EnvelopeScreenHandler
+import bewis09.communicated.screen.CommunicatedScreenHandlers
 import bewis09.communicated.server.CommunicatedServersidePackets
 import net.fabricmc.api.ModInitializer
-import net.minecraft.registry.Registries
-import net.minecraft.registry.Registry
-import net.minecraft.resource.featuretoggle.FeatureFlags
-import net.minecraft.screen.ScreenHandler
-import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.server.MinecraftServer
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
-import net.minecraft.util.Identifier
 import net.minecraft.util.WorldSavePath
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -27,7 +23,6 @@ object Communicated : ModInitializer {
 
     @Suppress("MemberVisibilityCanBePrivate")
 	val LOGGER: Logger = LoggerFactory.getLogger("Communicated")
-	val ENVELOPE_SCREEN_HANDLER = register("envelope_screen_handler") { a, b -> EnvelopeScreenHandler(a, b) }
 
 	val translations = hashMapOf<String, String>()
 
@@ -38,6 +33,9 @@ object Communicated : ModInitializer {
 
 		CommunicatedItems
 		CommunicatedComponents
+		CommunicatedScreenHandlers
+		CommunicatedBlocks
+		CommunicatedBlockEntities
 	}
 
 	fun getEncryptionKey(server: MinecraftServer): ByteArray {
@@ -71,10 +69,6 @@ object Communicated : ModInitializer {
 		encryption_key = key
 
 		return key
-	}
-
-	private fun <K: ScreenHandler> register(path: String, factory: ScreenHandlerType.Factory<K>): ScreenHandlerType<K> {
-		return Registry.register(Registries.SCREEN_HANDLER, Identifier.of("communicated", path), ScreenHandlerType(factory, FeatureFlags.VANILLA_FEATURES))
 	}
 
 	fun translatedText(path: String, en_us: String): MutableText {

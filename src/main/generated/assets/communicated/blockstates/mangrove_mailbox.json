@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "communicated:block/mangrove_mailbox",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "communicated:block/mangrove_mailbox"
+    },
+    "facing=south": {
+      "model": "communicated:block/mangrove_mailbox",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "communicated:block/mangrove_mailbox",
+      "y": 270
+    }
+  }
+}

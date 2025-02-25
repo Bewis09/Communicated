@@ -1,6 +1,5 @@
 package bewis09.communicated.screen
 
-import bewis09.communicated.Communicated
 import bewis09.communicated.item.CommunicatedItems
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.ContainerComponent
@@ -14,7 +13,7 @@ import net.minecraft.screen.slot.Slot
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.collection.DefaultedList
 
-class EnvelopeScreenHandler(syncId: Int, val playerInventory: PlayerInventory, val slot: Int): ScreenHandler(Communicated.ENVELOPE_SCREEN_HANDLER, syncId) {
+class EnvelopeScreenHandler(syncId: Int, val playerInventory: PlayerInventory, val slot: Int): ScreenHandler(CommunicatedScreenHandlers.ENVELOPE_SCREEN_HANDLER, syncId) {
     private val defaultedList = DefaultedList.ofSize(3, ItemStack.EMPTY)
     private val inventory: SimpleInventory
     val itemStack: ItemStack = playerInventory.getStack(slot)

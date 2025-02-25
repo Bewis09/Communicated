@@ -1,0 +1,7 @@
+{
+  "parent": "communicated:block/mailbox",
+  "textures": {
+    "1": "minecraft:block/jungle_log",
+    "2": "minecraft:block/jungle_planks"
+  }
+}

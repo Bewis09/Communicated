@@ -1,4 +1,13 @@
 {
+  "block.communicated.acacia_mailbox": "Acacia Mailbox",
+  "block.communicated.birch_mailbox": "Birch Mailbox",
+  "block.communicated.cherry_mailbox": "Cherry Mailbox",
+  "block.communicated.dark_oak_mailbox": "Dark Oak Mailbox",
+  "block.communicated.jungle_mailbox": "Jungle Mailbox",
+  "block.communicated.mangrove_mailbox": "Mangrove Mailbox",
+  "block.communicated.oak_mailbox": "Oak Mailbox",
+  "block.communicated.pale_oak_mailbox": "Pale Oak Mailbox",
+  "block.communicated.spruce_mailbox": "Spruce Mailbox",
   "communicated.designated_to_field": "Designated to: ",
   "communicated.gui.close_envelope": "Close Envelope",
   "communicated.gui.envelope_screen": "Envelope",

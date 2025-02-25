@@ -1,0 +1,7 @@
+{
+  "parent": "communicated:block/mailbox",
+  "textures": {
+    "1": "minecraft:block/mangrove_log",
+    "2": "minecraft:block/mangrove_planks"
+  }
+}

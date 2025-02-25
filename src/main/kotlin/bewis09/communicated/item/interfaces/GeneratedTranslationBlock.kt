@@ -1,5 +1,5 @@
 package bewis09.communicated.item.interfaces
 
-interface GeneratedTranslationItem {
+interface GeneratedTranslationBlock {
     fun getTitle(): String
 }

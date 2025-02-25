@@ -1,5 +1,6 @@
 package bewis09.communicated
 
+import bewis09.communicated.datagen.BlockStateGenerator
 import bewis09.communicated.item.CommunicatedItems
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
@@ -46,6 +47,30 @@ object CommunicatedDataGenerator : DataGeneratorEntrypoint {
 			Ingredient.ofItem(Items.INK_SAC),
 			Ingredient.ofItem(Items.FEATHER)
 		))
+
+		addMailboxRecipe(CommunicatedItems.OAK_MAILBOX, Items.OAK_LOG, Items.OAK_PLANKS, "oak_mailbox")
+		addMailboxRecipe(CommunicatedItems.SPRUCE_MAILBOX, Items.SPRUCE_LOG, Items.SPRUCE_PLANKS, "spruce_mailbox")
+		addMailboxRecipe(CommunicatedItems.BIRCH_MAILBOX, Items.BIRCH_LOG, Items.BIRCH_PLANKS, "birch_mailbox")
+		addMailboxRecipe(CommunicatedItems.JUNGLE_MAILBOX, Items.JUNGLE_LOG, Items.JUNGLE_PLANKS, "jungle_mailbox")
+		addMailboxRecipe(CommunicatedItems.ACACIA_MAILBOX, Items.ACACIA_LOG, Items.ACACIA_PLANKS, "acacia_mailbox")
+		addMailboxRecipe(CommunicatedItems.DARK_OAK_MAILBOX, Items.DARK_OAK_LOG, Items.DARK_OAK_PLANKS, "dark_oak_mailbox")
+		addMailboxRecipe(CommunicatedItems.CHERRY_MAILBOX, Items.CHERRY_LOG, Items.CHERRY_PLANKS, "cherry_mailbox")
+		addMailboxRecipe(CommunicatedItems.MANGROVE_MAILBOX, Items.MANGROVE_LOG, Items.MANGROVE_PLANKS, "mangrove_mailbox")
+		addMailboxRecipe(CommunicatedItems.PALE_OAK_MAILBOX, Items.PALE_OAK_LOG, Items.PALE_OAK_PLANKS, "pale_oak_mailbox")
+	}
+
+	private fun addMailboxRecipe(mailbox: ItemConvertible, log: ItemConvertible, planks: ItemConvertible, string: String) {
+		addRecipe(ShapedGeneratedCraftingRecipe(
+			RecipeCategory.DECORATIONS,
+			mailbox,
+			1,
+			string,
+			ShapedGeneratedCraftingRecipe.Pattern(
+				ShapedGeneratedCraftingRecipe.Pattern.PatternLine(Ingredient.ofItem(log), Ingredient.ofItem(log)),
+				ShapedGeneratedCraftingRecipe.Pattern.PatternLine(Ingredient.ofItem(planks), Ingredient.ofItem(planks)),
+				ShapedGeneratedCraftingRecipe.Pattern.PatternLine(Ingredient.ofItem(planks), Ingredient.ofItem(planks))
+			)
+		))
 	}
 
 	override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
@@ -59,6 +84,7 @@ object CommunicatedDataGenerator : DataGeneratorEntrypoint {
 
 	class CommunicatedModelProvider(output: FabricDataOutput) : FabricModelProvider(output) {
 		override fun generateBlockStateModels(blockStateModelGenerator: BlockStateModelGenerator) {
+			BlockStateGenerator.generateBlockStates(blockStateModelGenerator)
 		}
 
 		override fun generateItemModels(itemModelGenerator: ItemModelGenerator) {
