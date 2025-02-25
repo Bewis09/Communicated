@@ -46,6 +46,20 @@ class MailboxBlock(settings: Settings, private val en_us: String): BlockWithEnti
         return ActionResult.SUCCESS
     }
 
+    override fun hasComparatorOutput(state: BlockState?): Boolean {
+        return true
+    }
+
+    override fun getComparatorOutput(state: BlockState?, world: World?, pos: BlockPos?): Int {
+        val mailboxBlockEntity = world?.getBlockEntity(pos) as? MailboxBlockEntity
+
+        if(mailboxBlockEntity != null) {
+            return mailboxBlockEntity.getComparatorOutput()
+        }
+
+        return 0
+    }
+
     override fun createBlockEntity(pos: BlockPos?, state: BlockState?): BlockEntity {
         return MailboxBlockEntity(pos, state)
     }

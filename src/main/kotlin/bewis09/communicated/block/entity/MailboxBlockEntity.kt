@@ -123,4 +123,8 @@ class MailboxBlockEntity(pos: BlockPos?, state: BlockState?): BlockEntity(Commun
 
         return stack
     }
+
+    fun getComparatorOutput(): Int {
+        return 15 - items.sumOf { it.isEmpty.compareTo(false) }
+    }
 }
