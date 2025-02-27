@@ -4,6 +4,7 @@ import bewis09.communicated.block.CommunicatedBlocks
 import bewis09.communicated.block.entity.CommunicatedBlockEntities
 import bewis09.communicated.item.CommunicatedItems
 import bewis09.communicated.item.components.CommunicatedComponents
+import bewis09.communicated.recipe.CommunicatedRecipes
 import bewis09.communicated.screen.CommunicatedScreenHandlers
 import bewis09.communicated.server.CommunicatedServersidePackets
 import net.fabricmc.api.ModInitializer
@@ -36,6 +37,7 @@ object Communicated : ModInitializer {
 		CommunicatedScreenHandlers
 		CommunicatedBlocks
 		CommunicatedBlockEntities
+		CommunicatedRecipes
 	}
 
 	fun getEncryptionKey(server: MinecraftServer): ByteArray {

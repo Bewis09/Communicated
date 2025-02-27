@@ -1,7 +1,6 @@
 package bewis09.communicated.item
 
 import bewis09.communicated.Communicated
-import bewis09.communicated.item.interfaces.FlatModelItem
 import bewis09.communicated.item.interfaces.GeneratedTranslationItem
 import bewis09.communicated.screen.EnvelopeScreenHandler
 import net.minecraft.entity.player.PlayerEntity
@@ -14,7 +13,7 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.world.World
 
-class EnvelopeItem(settings: Settings): Item(settings), GeneratedTranslationItem, FlatModelItem {
+class EnvelopeItem(settings: Settings): Item(settings), GeneratedTranslationItem {
     private val TITLE = Communicated.translatedText("gui.envelope_screen","Envelope")
 
     override fun getTitle(): String = "Envelope"

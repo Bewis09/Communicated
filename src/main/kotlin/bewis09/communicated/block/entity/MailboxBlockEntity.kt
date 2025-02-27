@@ -18,6 +18,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Nameable
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
+import java.util.*
 
 class MailboxBlockEntity(pos: BlockPos?, state: BlockState?): BlockEntity(CommunicatedBlockEntities.MAILBOX_BLOCK_ENTITY, pos, state), NamedScreenHandlerFactory, Inventory, Nameable {
     companion object {
@@ -27,6 +28,7 @@ class MailboxBlockEntity(pos: BlockPos?, state: BlockState?): BlockEntity(Commun
     }
 
     private var items: DefaultedList<ItemStack> = DefaultedList.ofSize(this.size(), ItemStack.EMPTY)
+    var key: UUID? = null
 
     override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity?): ScreenHandler {
         return MailboxScreenHandler(CommunicatedScreenHandlers.MAILBOX_SCREEN_HANDLER, syncId, this, playerInventory)
@@ -43,12 +45,16 @@ class MailboxBlockEntity(pos: BlockPos?, state: BlockState?): BlockEntity(Commun
     override fun writeNbt(nbt: NbtCompound?, registries: WrapperLookup?) {
         super.writeNbt(nbt, registries)
         Inventories.writeNbt(nbt, items, registries)
+
+        if(key != null)
+            nbt?.putUuid("Key", key)
     }
 
     override fun readNbt(nbt: NbtCompound, registries: WrapperLookup?) {
         super.readNbt(nbt, registries)
         items = DefaultedList.ofSize(this.size(), ItemStack.EMPTY)
         Inventories.readNbt(nbt, items, registries)
+        key = try { nbt.getUuid("Key") } catch (e: Exception) { null }
     }
 
     override fun clear() {

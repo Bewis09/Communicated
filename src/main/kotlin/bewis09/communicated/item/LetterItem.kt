@@ -3,7 +3,6 @@ package bewis09.communicated.item
 import bewis09.communicated.Communicated
 import bewis09.communicated.item.components.CommunicatedComponents
 import bewis09.communicated.item.components.LetterComponent
-import bewis09.communicated.item.interfaces.FlatModelItem
 import bewis09.communicated.item.interfaces.GeneratedTranslationItem
 import bewis09.communicated.server.LetterOpeningPayload
 import bewis09.communicated.util.EncryptionUtil
@@ -20,7 +19,7 @@ import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
 import net.minecraft.world.World
 
-class LetterItem(settings: Settings): Item(settings), GeneratedTranslationItem, FlatModelItem {
+class LetterItem(settings: Settings): Item(settings), GeneratedTranslationItem {
     companion object {
         val NOT_FOR_YOU = Communicated.translatedText("letter.not_for_you", "You are not allowed to open this letter")
         val LETTER_FOR = Communicated.translatedTextWithParams("letter_for", "for %s")

@@ -1,3 +1,0 @@
-package bewis09.communicated.item.interfaces
-
-interface FlatModelItem

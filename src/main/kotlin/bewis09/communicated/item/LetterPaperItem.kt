@@ -2,7 +2,6 @@ package bewis09.communicated.item
 
 import bewis09.communicated.Communicated
 import bewis09.communicated.item.components.CommunicatedComponents
-import bewis09.communicated.item.interfaces.FlatModelItem
 import bewis09.communicated.item.interfaces.GeneratedTranslationItem
 import bewis09.communicated.util.PlayerEntityInvoker
 import net.minecraft.entity.player.PlayerEntity
@@ -15,7 +14,7 @@ import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
 import net.minecraft.world.World
 
-class LetterPaperItem(settings: Settings): Item(settings), GeneratedTranslationItem, FlatModelItem {
+class LetterPaperItem(settings: Settings): Item(settings), GeneratedTranslationItem {
     companion object {
         val PAGES_TEXT = Communicated.translatedTextWithParams("letter_paper_pages_tooltip","%s Pages")
         val ONE_PAGE_TEXT = Communicated.translatedText("letter_paper_one_page_tooltip","1 Page")

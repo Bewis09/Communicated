@@ -1,6 +1,7 @@
 package bewis09.communicated.block
 
 import bewis09.communicated.block.entity.MailboxBlockEntity
+import bewis09.communicated.item.components.CommunicatedComponents
 import bewis09.communicated.item.interfaces.GeneratedTranslationBlock
 import com.mojang.serialization.MapCodec
 import net.minecraft.block.*
@@ -38,7 +39,7 @@ class MailboxBlock(settings: Settings, private val en_us: String): BlockWithEnti
         if (world is ServerWorld && mailboxBlockEntity != null) {
             val i = mailboxBlockEntity.addStack(player.inventory.mainHandStack)
 
-            if(i == player.inventory.mainHandStack)
+            if(i == player.inventory.mainHandStack && (mailboxBlockEntity.key == null || mailboxBlockEntity.key == player.inventory.mainHandStack.get(CommunicatedComponents.KEY)))
                 player.openHandledScreen(mailboxBlockEntity)
             else
                 player.inventory.setStack(player.inventory.selectedSlot, i)

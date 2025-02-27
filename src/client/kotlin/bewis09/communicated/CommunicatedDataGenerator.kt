@@ -2,6 +2,7 @@ package bewis09.communicated
 
 import bewis09.communicated.datagen.BlockStateGenerator
 import bewis09.communicated.item.CommunicatedItems
+import bewis09.communicated.recipe.LockMailboxRecipe
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
@@ -11,12 +12,14 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
 import net.minecraft.client.data.BlockStateModelGenerator
 import net.minecraft.client.data.ItemModelGenerator
 import net.minecraft.client.data.Models
+import net.minecraft.data.recipe.ComplexRecipeJsonBuilder
 import net.minecraft.data.recipe.RecipeExporter
 import net.minecraft.data.recipe.RecipeGenerator
 import net.minecraft.data.recipe.RecipeGenerator.hasItem
 import net.minecraft.item.ItemConvertible
 import net.minecraft.item.Items
 import net.minecraft.recipe.Ingredient
+import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.recipe.book.RecipeCategory
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
@@ -111,6 +114,8 @@ object CommunicatedDataGenerator : DataGeneratorEntrypoint {
 			return object : RecipeGenerator(registryLookup, exporter) {
 				override fun generate() {
 					generateRecipes(this, exporter)
+
+					ComplexRecipeJsonBuilder.create { craftingRecipeCategory: CraftingRecipeCategory? -> LockMailboxRecipe(craftingRecipeCategory) }.offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of("communicated", "lock_mailbox")))
 				}
 			}
 		}
