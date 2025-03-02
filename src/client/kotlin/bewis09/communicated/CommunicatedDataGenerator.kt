@@ -61,6 +61,16 @@ object CommunicatedDataGenerator : DataGeneratorEntrypoint {
 		addMailboxRecipe(CommunicatedItems.CHERRY_MAILBOX, Items.CHERRY_LOG, Items.CHERRY_PLANKS, "cherry_mailbox")
 		addMailboxRecipe(CommunicatedItems.MANGROVE_MAILBOX, Items.MANGROVE_LOG, Items.MANGROVE_PLANKS, "mangrove_mailbox")
 		addMailboxRecipe(CommunicatedItems.PALE_OAK_MAILBOX, Items.PALE_OAK_LOG, Items.PALE_OAK_PLANKS, "pale_oak_mailbox")
+
+		addRecipe(ShapedGeneratedCraftingRecipe(
+			RecipeCategory.TOOLS,
+			CommunicatedItems.UNUSED_KEY,
+			1,
+			"key",
+			ShapedGeneratedCraftingRecipe.Pattern(
+				ShapedGeneratedCraftingRecipe.Pattern.PatternLine(Ingredient.ofItem(Items.IRON_NUGGET), Ingredient.ofItem(Items.IRON_NUGGET), Ingredient.ofItem(Items.IRON_INGOT))
+			)
+		))
 	}
 
 	private fun addMailboxRecipe(mailbox: ItemConvertible, log: ItemConvertible, planks: ItemConvertible, string: String) {
@@ -176,6 +186,8 @@ object CommunicatedDataGenerator : DataGeneratorEntrypoint {
 		class Pattern(vararg val patternLine: PatternLine) {
 			class PatternLine {
 				val ingredients: Array<Ingredient?> = arrayOf(null, null, null)
+
+				constructor()
 
 				constructor(ingredient: Ingredient) {
 					this.ingredients[0] = ingredient
