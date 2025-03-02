@@ -17,7 +17,8 @@ object CommunicatedItems {
     val LETTER = registerPlainAndTranslated("letter", { s -> LetterItem(s) }, Item.Settings().maxCount(1))
     val LETTER_PAPER = registerPlainAndTranslated("letter_paper", { s -> LetterPaperItem(s) }, Item.Settings().maxCount(1), ItemGroups.TOOLS)
     val ENVELOPE = registerPlainAndTranslated("envelope", { s -> EnvelopeItem(s) }, Item.Settings().maxCount(1), ItemGroups.TOOLS)
-    val KEY = registerPlainAndTranslated("key", { s -> KeyItem(s) }, Item.Settings().maxCount(1), ItemGroups.TOOLS)
+    val KEY = registerPlainAndTranslated("key", { s -> KeyItem(s) }, Item.Settings().maxCount(1))
+    val UNUSED_KEY = registerPlainAndTranslated("unused_key", { s -> SimpleTranslatedItem(s, "Unused Key") }, Item.Settings().maxCount(1), ItemGroups.TOOLS)
 
     val OAK_MAILBOX = registerMailboxBlockItem("oak_mailbox", CommunicatedBlocks.OAK_MAILBOX_BLOCK )
     val SPRUCE_MAILBOX = registerMailboxBlockItem("spruce_mailbox", CommunicatedBlocks.SPRUCE_MAILBOX_BLOCK )
@@ -38,7 +39,7 @@ object CommunicatedItems {
     }
 
     private fun <T> registerMailboxBlockItem(path: String, b: T): BlockItem where T : GeneratedTranslationBlock, T : Block {
-        val i = register(path, { s -> MailboxBlockItem(b, s, "Locked "+b.getTitle()) }, Item.Settings().useBlockPrefixedTranslationKey(), ItemGroups.FUNCTIONAL)
+        val i = register(path, { s -> MailboxBlockItem(b, s) }, Item.Settings().useBlockPrefixedTranslationKey(), ItemGroups.FUNCTIONAL)
         return i
     }
 

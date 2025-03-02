@@ -29,7 +29,7 @@ class LetterPaperItem(settings: Settings): Item(settings), GeneratedTranslationI
     override fun appendTooltip(stack: ItemStack?, context: TooltipContext?, tooltip: MutableList<Text>?, type: TooltipType?) {
         val a = stack?.get(CommunicatedComponents.LETTER_PAPER_CONTENT)
         if(a != null)
-            tooltip?.add((if(a.pages.size > 1) PAGES_TEXT(arrayOf(a.pages.size)) else ONE_PAGE_TEXT).formatted(Formatting.GRAY))
+            tooltip?.add((if(a.pages.size > 1) PAGES_TEXT.translate(arrayOf(a.pages.size)) else ONE_PAGE_TEXT).formatted(Formatting.GRAY))
         super.appendTooltip(stack, context, tooltip, type)
     }
 

@@ -23,7 +23,7 @@ class LetterViewingScreen(private val component: LetterComponent): Screen(Text.o
 
         val total_height = (if (component.author == null) 20 else 29) + if(component.papers.isEmpty()) 9 else component.papers.size * element_height
 
-        val total_width = textRenderer.getWidth(PAGES_TEXT(arrayOf(10))).coerceAtLeast(component.papers.map { Text.of(it.title) }.maxOfOrNull { textRenderer.getWidth(it) } ?: 0).plus(30)
+        val total_width = textRenderer.getWidth(PAGES_TEXT.translate(arrayOf(10))).coerceAtLeast(component.papers.map { Text.of(it.title) }.maxOfOrNull { textRenderer.getWidth(it) } ?: 0).plus(30)
         val top = (height / 2.5).toInt() - total_height / 2
 
         val x = width / 2 - total_width / 2
@@ -44,7 +44,7 @@ class LetterViewingScreen(private val component: LetterComponent): Screen(Text.o
             context?.drawTexture({ texture: Identifier? -> RenderLayer.getGuiTextured(texture) }, Identifier.of("communicated","textures/item/letter_paper.png"), x, y + 8, 0f, 0f, 20, 20, 20, 20)
 
             context?.drawTextWithShadow(textRenderer, c.title, x + 30, y + 10, -1)
-            context?.drawTextWithShadow(textRenderer, (if(c.pages.size > 1) PAGES_TEXT(arrayOf(c.pages.size)) else ONE_PAGE_TEXT), x + 30, y + 19, 0xFFAAAAAA.toInt())
+            context?.drawTextWithShadow(textRenderer, (if(c.pages.size > 1) PAGES_TEXT.translate(arrayOf(c.pages.size)) else ONE_PAGE_TEXT), x + 30, y + 19, 0xFFAAAAAA.toInt())
         }
 
         if(component.papers.isEmpty())
@@ -58,7 +58,7 @@ class LetterViewingScreen(private val component: LetterComponent): Screen(Text.o
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         val total_height = (if (component.author == null) 20 else 29) + if(component.papers.isEmpty()) 9 else component.papers.size * element_height
 
-        val total_width = component.papers.map { Text.of(it.title) }.also { mutableListOf(*it.toTypedArray()).add(PAGES_TEXT(arrayOf(10))) }.maxOfOrNull { textRenderer.getWidth(it) }?.plus(30) ?: 0
+        val total_width = component.papers.map { Text.of(it.title) }.also { mutableListOf(*it.toTypedArray()).add(PAGES_TEXT.translate(arrayOf(10))) }.maxOfOrNull { textRenderer.getWidth(it) }?.plus(30) ?: 0
         val top = (height / 2.5).toInt() - total_height / 2
 
         val x = width / 2 - total_width / 2

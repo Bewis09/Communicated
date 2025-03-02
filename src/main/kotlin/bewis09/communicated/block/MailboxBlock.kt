@@ -1,20 +1,29 @@
 package bewis09.communicated.block
 
+import bewis09.communicated.Communicated
 import bewis09.communicated.block.entity.MailboxBlockEntity
+import bewis09.communicated.item.CommunicatedItems
 import bewis09.communicated.item.components.CommunicatedComponents
 import bewis09.communicated.item.interfaces.GeneratedTranslationBlock
 import com.mojang.serialization.MapCodec
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.component.DataComponentTypes
+import net.minecraft.component.type.NbtComponent
+import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.Item
 import net.minecraft.item.ItemPlacementContext
+import net.minecraft.item.ItemStack
+import net.minecraft.network.packet.s2c.play.OverlayMessageS2CPacket
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.EnumProperty
 import net.minecraft.util.ActionResult
 import net.minecraft.util.BlockMirror
 import net.minecraft.util.BlockRotation
-import net.minecraft.util.ItemScatterer
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
@@ -27,6 +36,9 @@ class MailboxBlock(settings: Settings, private val en_us: String): BlockWithEnti
     companion object {
         val CODEC: MapCodec<MailboxBlock> = createCodec { MailboxBlock(it,"") }
         val FACING: EnumProperty<Direction> = HorizontalFacingBlock.FACING
+
+        val LOCKED_MAILBOX = Communicated.translatedText("locked_mailbox", "This mailbox is locked")
+        val WRONG_KEY = Communicated.translatedText("wrong_key", "This is the wrong key")
     }
 
     override fun getCodec(): MapCodec<out BlockWithEntity> {
@@ -39,10 +51,13 @@ class MailboxBlock(settings: Settings, private val en_us: String): BlockWithEnti
         if (world is ServerWorld && mailboxBlockEntity != null) {
             val i = mailboxBlockEntity.addStack(player.inventory.mainHandStack)
 
-            if(i == player.inventory.mainHandStack && (mailboxBlockEntity.key == null || mailboxBlockEntity.key == player.inventory.mainHandStack.get(CommunicatedComponents.KEY)))
-                player.openHandledScreen(mailboxBlockEntity)
-            else
-                player.inventory.setStack(player.inventory.selectedSlot, i)
+            if (i == player.inventory.mainHandStack) {
+                when {
+                    mailboxBlockEntity.key == null || mailboxBlockEntity.key == player.inventory.mainHandStack.get(CommunicatedComponents.KEY) -> player.openHandledScreen(mailboxBlockEntity)
+                    player.inventory.mainHandStack.item == CommunicatedItems.KEY -> (player as ServerPlayerEntity).networkHandler.sendPacket(OverlayMessageS2CPacket(WRONG_KEY))
+                    else -> (player as ServerPlayerEntity).networkHandler.sendPacket(OverlayMessageS2CPacket(LOCKED_MAILBOX))
+                }
+            } else player.inventory.setStack(player.inventory.selectedSlot, i)
         }
 
         return ActionResult.SUCCESS
@@ -113,8 +128,38 @@ class MailboxBlock(settings: Settings, private val en_us: String): BlockWithEnti
         return defaultState.with(FACING, if(ctx.side == Direction.UP || ctx.side == Direction.DOWN) ctx.horizontalPlayerFacing.opposite else ctx.side)
     }
 
-    override fun onStateReplaced(state: BlockState, world: World?, pos: BlockPos?, newState: BlockState, moved: Boolean) {
-        ItemScatterer.onStateReplaced(state, newState, world, pos)
-        super.onStateReplaced(state, world, pos, newState, moved)
+    private fun getItem(): Item {
+        return when (this) {
+            CommunicatedBlocks.OAK_MAILBOX_BLOCK -> CommunicatedItems.OAK_MAILBOX
+            CommunicatedBlocks.SPRUCE_MAILBOX_BLOCK -> CommunicatedItems.SPRUCE_MAILBOX
+            CommunicatedBlocks.BIRCH_MAILBOX_BLOCK -> CommunicatedItems.BIRCH_MAILBOX
+            CommunicatedBlocks.JUNGLE_MAILBOX_BLOCK -> CommunicatedItems.JUNGLE_MAILBOX
+            CommunicatedBlocks.ACACIA_MAILBOX_BLOCK -> CommunicatedItems.ACACIA_MAILBOX
+            CommunicatedBlocks.DARK_OAK_MAILBOX_BLOCK -> CommunicatedItems.DARK_OAK_MAILBOX
+            CommunicatedBlocks.MANGROVE_MAILBOX_BLOCK -> CommunicatedItems.MANGROVE_MAILBOX
+            CommunicatedBlocks.PALE_OAK_MAILBOX_BLOCK -> CommunicatedItems.PALE_OAK_MAILBOX
+            CommunicatedBlocks.CHERRY_MAILBOX_BLOCK -> CommunicatedItems.CHERRY_MAILBOX
+            else -> CommunicatedItems.OAK_MAILBOX
+        }
+    }
+
+    override fun onBreak(world: World, pos: BlockPos, state: BlockState?, player: PlayerEntity): BlockState {
+        val blockEntity = world.getBlockEntity(pos)
+        if (blockEntity is MailboxBlockEntity) {
+            if (!world.isClient) {
+                val itemStack = ItemStack(getItem())
+                itemStack.applyComponentsFrom(blockEntity.createComponentMap())
+
+                val nbt = blockEntity.createComponentlessNbt(world.registryManager)
+                nbt.putString("id", BlockEntityType.getId(blockEntity.getType()).toString())
+                itemStack.set(DataComponentTypes.BLOCK_ENTITY_DATA, NbtComponent.of(nbt))
+
+                val itemEntity = ItemEntity(world, pos.x.toDouble() + 0.5, pos.y.toDouble() + 0.5, pos.z.toDouble() + 0.5, itemStack)
+                itemEntity.setToDefaultPickupDelay()
+                world.spawnEntity(itemEntity)
+            }
+        }
+
+        return super.onBreak(world, pos, state, player)
     }
 }

@@ -60,11 +60,11 @@ class LetterItem(settings: Settings): Item(settings), GeneratedTranslationItem {
         if(letterComponent.author != null)
             tooltip?.add(Text.translatable("book.byAuthor", letterComponent.author).formatted(Formatting.GRAY))
         if(letterComponent.designated_to != null)
-            tooltip?.add(LETTER_FOR(arrayOf(letterComponent.designated_to)).formatted(Formatting.GRAY))
+            tooltip?.add(LETTER_FOR.translate(arrayOf(letterComponent.designated_to)).formatted(Formatting.GRAY))
         if(letterComponent.papers.size == 1)
             tooltip?.add(SINGLE_PAPER_COUNT.formatted(Formatting.GRAY))
         else
-            tooltip?.add(PAPER_COUNT(arrayOf(letterComponent.papers.size)).formatted(Formatting.GRAY))
+            tooltip?.add(PAPER_COUNT.translate(arrayOf(letterComponent.papers.size)).formatted(Formatting.GRAY))
     }
 
     override fun getTitle(): String = "Letter"

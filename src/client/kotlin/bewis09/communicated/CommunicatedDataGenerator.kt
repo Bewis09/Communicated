@@ -2,6 +2,7 @@ package bewis09.communicated
 
 import bewis09.communicated.datagen.BlockStateGenerator
 import bewis09.communicated.item.CommunicatedItems
+import bewis09.communicated.recipe.CopyKeyRecipe
 import bewis09.communicated.recipe.LockMailboxRecipe
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
@@ -116,6 +117,7 @@ object CommunicatedDataGenerator : DataGeneratorEntrypoint {
 					generateRecipes(this, exporter)
 
 					ComplexRecipeJsonBuilder.create { craftingRecipeCategory: CraftingRecipeCategory? -> LockMailboxRecipe(craftingRecipeCategory) }.offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of("communicated", "lock_mailbox")))
+					ComplexRecipeJsonBuilder.create { craftingRecipeCategory: CraftingRecipeCategory? -> CopyKeyRecipe(craftingRecipeCategory) }.offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of("communicated", "copy_key")))
 				}
 			}
 		}

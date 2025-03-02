@@ -5,6 +5,8 @@ import bewis09.communicated.screen.CommunicatedScreenHandlers
 import bewis09.communicated.screen.MailboxScreenHandler
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.component.ComponentMap
+import net.minecraft.component.DataComponentTypes
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
@@ -15,12 +17,13 @@ import net.minecraft.registry.RegistryWrapper.WrapperLookup
 import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
-import net.minecraft.util.Nameable
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import java.util.*
 
-class MailboxBlockEntity(pos: BlockPos?, state: BlockState?): BlockEntity(CommunicatedBlockEntities.MAILBOX_BLOCK_ENTITY, pos, state), NamedScreenHandlerFactory, Inventory, Nameable {
+class MailboxBlockEntity(pos: BlockPos?, state: BlockState?): BlockEntity(CommunicatedBlockEntities.MAILBOX_BLOCK_ENTITY, pos, state), NamedScreenHandlerFactory, Inventory {
+    private var customName: Text? = null
+
     companion object {
         fun isValidMailboxContent(stack: ItemStack): Boolean {
             return stack.item == CommunicatedItems.LETTER || stack.item == CommunicatedItems.ENVELOPE || stack.item == CommunicatedItems.LETTER_PAPER
@@ -34,15 +37,19 @@ class MailboxBlockEntity(pos: BlockPos?, state: BlockState?): BlockEntity(Commun
         return MailboxScreenHandler(CommunicatedScreenHandlers.MAILBOX_SCREEN_HANDLER, syncId, this, playerInventory)
     }
 
-    override fun getName(): Text {
-        return if (this.customName != null) this.customName!! else world!!.getBlockState(pos).block.name
-    }
-
     override fun getDisplayName(): Text {
-        return this.name
+        return this.customName ?: world!!.getBlockState(pos).block.name
     }
 
-    override fun writeNbt(nbt: NbtCompound?, registries: WrapperLookup?) {
+    override fun readComponents(components: ComponentsAccess?) {
+        customName = components?.get(DataComponentTypes.CUSTOM_NAME)
+    }
+
+    override fun addComponents(builder: ComponentMap.Builder?) {
+        builder?.add(DataComponentTypes.CUSTOM_NAME, customName)
+    }
+
+    public override fun writeNbt(nbt: NbtCompound?, registries: WrapperLookup?) {
         super.writeNbt(nbt, registries)
         Inventories.writeNbt(nbt, items, registries)
 

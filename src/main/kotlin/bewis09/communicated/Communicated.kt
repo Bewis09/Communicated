@@ -1,5 +1,6 @@
 package bewis09.communicated
 
+import bewis09.communicated.Communicated.TranslatorParamFunction
 import bewis09.communicated.block.CommunicatedBlocks
 import bewis09.communicated.block.entity.CommunicatedBlockEntities
 import bewis09.communicated.item.CommunicatedItems
@@ -78,8 +79,12 @@ object Communicated : ModInitializer {
 		return Text.translatable("communicated.$path")
 	}
 
-	fun translatedTextWithParams(path: String, en_us: String): (str: Array<Any>) -> MutableText {
+	fun interface TranslatorParamFunction {
+		fun translate(vararg str: Any): MutableText
+	}
+
+	fun translatedTextWithParams(path: String, en_us: String): TranslatorParamFunction {
 		translations["communicated.$path"] = en_us
-		return { Text.translatable("communicated.$path",*it) }
+		return TranslatorParamFunction { Text.translatable("communicated.$path",*it) }
 	}
 }

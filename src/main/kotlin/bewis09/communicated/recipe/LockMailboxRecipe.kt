@@ -1,9 +1,11 @@
 package bewis09.communicated.recipe
 
+import bewis09.communicated.Communicated
 import bewis09.communicated.block.MailboxBlock
 import bewis09.communicated.block.entity.CommunicatedBlockEntities
 import bewis09.communicated.item.CommunicatedItems
 import bewis09.communicated.item.components.CommunicatedComponents
+import net.minecraft.component.ComponentType
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.NbtComponent
 import net.minecraft.item.BlockItem
@@ -20,7 +22,7 @@ import net.minecraft.world.World
 import java.util.*
 
 class LockMailboxRecipe(category: CraftingRecipeCategory?) : SpecialCraftingRecipe(category) {
-    var uuid: UUID = UUID.randomUUID()
+    private var uuid: UUID = UUID.randomUUID()
 
     override fun matches(input: CraftingRecipeInput?, world: World?): Boolean {
         if (input?.stackCount != 2)
@@ -41,7 +43,7 @@ class LockMailboxRecipe(category: CraftingRecipeCategory?) : SpecialCraftingReci
                 }
             }
 
-            if(item == CommunicatedItems.KEY) {
+            if(item == CommunicatedItems.UNUSED_KEY) {
                 if (keyStack >= 0)
                     return false
                 keyStack = i
@@ -72,7 +74,7 @@ class LockMailboxRecipe(category: CraftingRecipeCategory?) : SpecialCraftingReci
                 }
             }
 
-            if(item == CommunicatedItems.KEY) {
+            if(item == CommunicatedItems.UNUSED_KEY) {
                 if (keyStack >= 0)
                     return ItemStack.EMPTY
                 keyStack = i
@@ -99,8 +101,20 @@ class LockMailboxRecipe(category: CraftingRecipeCategory?) : SpecialCraftingReci
 
         for (i in 0 until input.size()) {
             val stack = input.stacks[i]
-            if (stack.item == CommunicatedItems.KEY) {
-                list[i] = stack.copy()
+            if (stack.item == CommunicatedItems.UNUSED_KEY) {
+                list[i] = ItemStack(CommunicatedItems.KEY)
+                for (component in stack.componentChanges.entrySet()) {
+                    fun <T> set(type: ComponentType<T>, value: Any) {
+                        try {
+                            @Suppress("UNCHECKED_CAST")
+                            list[i].set(type, value as T)
+                        } catch (e: ClassCastException) {
+                            Communicated.LOGGER.warn("WTF how did this happen? $type $value")
+                        }
+                    }
+
+                    set(component.key, component.value.get())
+                }
                 list[i].set(CommunicatedComponents.KEY, uuid)
             }
         }
