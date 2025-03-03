@@ -24,6 +24,10 @@ class MailboxBlockItem(block: Block, settings: Settings): BlockItem(block, setti
 
     override fun appendTooltip(stack: ItemStack?, context: TooltipContext?, tooltip: MutableList<Text>?, type: TooltipType?) {
         val blockEntityData = stack?.get(DataComponentTypes.BLOCK_ENTITY_DATA) ?: return
+
+        if(!blockEntityData.contains("Key"))
+            return
+
         val key = blockEntityData.copyNbt().getUuid("Key")
 
         if(key != null) {

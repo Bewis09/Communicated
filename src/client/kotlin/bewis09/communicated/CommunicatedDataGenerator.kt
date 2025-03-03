@@ -1,5 +1,6 @@
 package bewis09.communicated
 
+import bewis09.communicated.block.CommunicatedBlocks
 import bewis09.communicated.datagen.BlockStateGenerator
 import bewis09.communicated.item.CommunicatedItems
 import bewis09.communicated.recipe.CopyKeyRecipe
@@ -10,6 +11,8 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider
+import net.minecraft.block.Block
 import net.minecraft.client.data.BlockStateModelGenerator
 import net.minecraft.client.data.ItemModelGenerator
 import net.minecraft.client.data.Models
@@ -22,6 +25,7 @@ import net.minecraft.item.Items
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.recipe.book.RecipeCategory
+import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.RegistryWrapper.WrapperLookup
@@ -83,7 +87,8 @@ object CommunicatedDataGenerator : DataGeneratorEntrypoint {
 				ShapedGeneratedCraftingRecipe.Pattern.PatternLine(Ingredient.ofItem(log), Ingredient.ofItem(log)),
 				ShapedGeneratedCraftingRecipe.Pattern.PatternLine(Ingredient.ofItem(planks), Ingredient.ofItem(planks)),
 				ShapedGeneratedCraftingRecipe.Pattern.PatternLine(Ingredient.ofItem(planks), Ingredient.ofItem(planks))
-			)
+			),
+			"wooden_mailbox"
 		))
 	}
 
@@ -94,6 +99,17 @@ object CommunicatedDataGenerator : DataGeneratorEntrypoint {
 		pack.addProvider { a, b -> CommunicatedRecipeProvider(a, b) }
 		pack.addProvider { a, b -> CommunicatedEnglishLangProvider(a, b) }
 		pack.addProvider { a, _ -> CommunicatedModelProvider(a) }
+		pack.addProvider { a, b -> CommunicatedTagProvider(a, b) }
+	}
+
+	class CommunicatedTagProvider(output: FabricDataOutput?, registriesFuture: CompletableFuture<WrapperLookup?>?) : FabricTagProvider<Block?>(output, RegistryKeys.BLOCK, registriesFuture) {
+		override fun configure(wrapperLookup: WrapperLookup?) {
+			CommunicatedBlocks.tagList.forEach { (t, u) ->
+				u.forEach { tagKey ->
+					getTagBuilder(tagKey).add(Registries.BLOCK.getId(t))
+				}
+			}
+		}
 	}
 
 	class CommunicatedModelProvider(output: FabricDataOutput) : FabricModelProvider(output) {
@@ -146,7 +162,8 @@ object CommunicatedDataGenerator : DataGeneratorEntrypoint {
 		private val outputItem: ItemConvertible,
 		private val outputCount: Int,
 		private val id: String,
-		private val pattern: Pattern
+		private val pattern: Pattern,
+		private val group: String? = null
 	): GeneratedCraftingRecipe {
 		override fun generate(recipeGenerator: RecipeGenerator, exporter: RecipeExporter) {
 			val r = recipeGenerator.createShaped(category, outputItem, outputCount)
@@ -180,6 +197,8 @@ object CommunicatedDataGenerator : DataGeneratorEntrypoint {
 				}
 			}
 
+			r.group(group)
+
 			r.offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of("communicated",id)))
 		}
 
@@ -212,7 +231,8 @@ object CommunicatedDataGenerator : DataGeneratorEntrypoint {
 		private val outputItem: ItemConvertible,
 		private val outputCount: Int,
 		private val id: String,
-		private vararg val items: Ingredient
+		private vararg val items: Ingredient,
+		private val group: String? = null
 	): GeneratedCraftingRecipe {
 		override fun generate(recipeGenerator: RecipeGenerator, exporter: RecipeExporter) {
 			val r = recipeGenerator.createShapeless(category, outputItem, outputCount)
@@ -225,6 +245,8 @@ object CommunicatedDataGenerator : DataGeneratorEntrypoint {
 					r.criterion(hasItem(it.value()), recipeGenerator.conditionsFromItem(it.value()))
 				}
 			}
+
+			r.group(group)
 
 			r.offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of("communicated",id)))
 		}

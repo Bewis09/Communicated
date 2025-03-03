@@ -37,6 +37,8 @@ class LockMailboxRecipe(category: CraftingRecipeCategory?) : SpecialCraftingReci
 
             if (item is BlockItem) {
                 if(item.block is MailboxBlock) {
+                    if(stack.contains(DataComponentTypes.BLOCK_ENTITY_DATA) && stack.get(DataComponentTypes.BLOCK_ENTITY_DATA)?.contains("Key") == true)
+                        return false
                     if (boxStack >= 0)
                         return false
                     boxStack = i
@@ -68,6 +70,8 @@ class LockMailboxRecipe(category: CraftingRecipeCategory?) : SpecialCraftingReci
 
             if (item is BlockItem) {
                 if(item.block is MailboxBlock) {
+                    if(stack.contains(DataComponentTypes.BLOCK_ENTITY_DATA) && stack.get(DataComponentTypes.BLOCK_ENTITY_DATA)?.contains("Key") == true)
+                        return ItemStack.EMPTY
                     if (boxStack >= 0)
                         return ItemStack.EMPTY
                     boxStack = i

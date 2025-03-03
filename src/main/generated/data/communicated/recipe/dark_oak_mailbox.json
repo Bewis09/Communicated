@@ -1,6 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "misc",
+  "group": "wooden_mailbox",
   "key": {
     "A": "minecraft:dark_oak_log",
     "B": "minecraft:dark_oak_planks"

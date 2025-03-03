@@ -1,6 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "misc",
+  "group": "wooden_mailbox",
   "key": {
     "A": "minecraft:mangrove_log",
     "B": "minecraft:mangrove_planks"
