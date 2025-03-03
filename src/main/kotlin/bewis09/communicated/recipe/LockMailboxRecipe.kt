@@ -96,6 +96,7 @@ class LockMailboxRecipe(category: CraftingRecipeCategory?) : SpecialCraftingReci
             nbt.putString("id", Registries.BLOCK_ENTITY_TYPE.getId(CommunicatedBlockEntities.MAILBOX_BLOCK_ENTITY).toString())
 
         stack.set(DataComponentTypes.BLOCK_ENTITY_DATA, NbtComponent.of(nbt))
+        stack.count = 1
 
         return stack
     }

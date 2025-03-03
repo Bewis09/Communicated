@@ -151,8 +151,10 @@ class MailboxBlock(settings: Settings, private val en_us: String): BlockWithEnti
                 itemStack.applyComponentsFrom(blockEntity.createComponentMap())
 
                 val nbt = blockEntity.createComponentlessNbt(world.registryManager)
-                nbt.putString("id", BlockEntityType.getId(blockEntity.getType()).toString())
-                itemStack.set(DataComponentTypes.BLOCK_ENTITY_DATA, NbtComponent.of(nbt))
+                if(!nbt.isEmpty) {
+                    nbt.putString("id", BlockEntityType.getId(blockEntity.getType()).toString())
+                    itemStack.set(DataComponentTypes.BLOCK_ENTITY_DATA, NbtComponent.of(nbt))
+                }
 
                 val itemEntity = ItemEntity(world, pos.x.toDouble() + 0.5, pos.y.toDouble() + 0.5, pos.z.toDouble() + 0.5, itemStack)
                 itemEntity.setToDefaultPickupDelay()

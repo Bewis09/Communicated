@@ -1,13 +1,13 @@
 {
   "values": [
-    "communicated:pale_oak_mailbox",
-    "communicated:oak_mailbox",
-    "communicated:jungle_mailbox",
-    "communicated:birch_mailbox",
     "communicated:acacia_mailbox",
-    "communicated:spruce_mailbox",
-    "communicated:dark_oak_mailbox",
+    "communicated:birch_mailbox",
     "communicated:cherry_mailbox",
-    "communicated:mangrove_mailbox"
+    "communicated:dark_oak_mailbox",
+    "communicated:jungle_mailbox",
+    "communicated:mangrove_mailbox",
+    "communicated:oak_mailbox",
+    "communicated:pale_oak_mailbox",
+    "communicated:spruce_mailbox"
   ]
 }

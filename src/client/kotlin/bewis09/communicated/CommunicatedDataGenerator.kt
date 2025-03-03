@@ -104,7 +104,7 @@ object CommunicatedDataGenerator : DataGeneratorEntrypoint {
 
 	class CommunicatedTagProvider(output: FabricDataOutput?, registriesFuture: CompletableFuture<WrapperLookup?>?) : FabricTagProvider<Block?>(output, RegistryKeys.BLOCK, registriesFuture) {
 		override fun configure(wrapperLookup: WrapperLookup?) {
-			CommunicatedBlocks.tagList.forEach { (t, u) ->
+			CommunicatedBlocks.tagList.entries.sortedBy { Registries.BLOCK.getId(it.key) }.forEach { (t, u) ->
 				u.forEach { tagKey ->
 					getTagBuilder(tagKey).add(Registries.BLOCK.getId(t))
 				}
@@ -188,7 +188,7 @@ object CommunicatedDataGenerator : DataGeneratorEntrypoint {
 				r.pattern(s)
 			}
 
-			for (c in hashMap.entries) {
+			for (c in hashMap.entries.sortedBy { it.value }) {
 				r.input(c.value, c.key)
 
 				@Suppress("DEPRECATION")

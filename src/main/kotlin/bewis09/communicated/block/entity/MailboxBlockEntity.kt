@@ -51,7 +51,9 @@ class MailboxBlockEntity(pos: BlockPos?, state: BlockState?): BlockEntity(Commun
 
     public override fun writeNbt(nbt: NbtCompound?, registries: WrapperLookup?) {
         super.writeNbt(nbt, registries)
-        Inventories.writeNbt(nbt, items, registries)
+
+        if (items.any { !it.isEmpty })
+            Inventories.writeNbt(nbt, items, registries)
 
         if(key != null)
             nbt?.putUuid("Key", key)
